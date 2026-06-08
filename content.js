@@ -300,6 +300,191 @@ function createCostAuditTable(audit) {
   `;
 }
 
+function createComparisonCard(a) {
+  if (!a.optimal_solution) return "";
+
+  return `
+    <div style="
+      background:#333333;
+      padding:16px;
+      border-radius:10px;
+      border:1px solid #444;
+      margin-bottom:20px;
+    ">
+      <div style="
+        font-size:12px;
+        color:#8a8a8a;
+        text-transform:uppercase;
+        letter-spacing:0.5px;
+        margin-bottom:14px;
+      ">
+        Solution Comparison
+      </div>
+
+      <div style="
+        display:grid;
+        grid-template-columns:1fr auto 1fr;
+        gap:14px;
+        align-items:center;
+      ">
+
+        <div style="
+          background:#282828;
+          border:1px solid #444;
+          border-radius:8px;
+          padding:12px;
+        ">
+          <div style="
+            font-size:11px;
+            color:#8a8a8a;
+            margin-bottom:6px;
+          ">
+            YOUR SOLUTION
+          </div>
+
+          <div style="
+            color:#eff1f6;
+            font-weight:600;
+            margin-bottom:8px;
+          ">
+            ${a.approach_evaluation.method_used}
+          </div>
+
+          <div style="
+            font-family:monospace;
+            color:#ffa116;
+          ">
+            ${a.asymptotic_complexity.time_complexity_big_o}
+          </div>
+
+          <div style="
+            font-family:monospace;
+            color:#acacac;
+            margin-top:4px;
+          ">
+            ${a.asymptotic_complexity.space_complexity_big_o}
+          </div>
+        </div>
+
+        <div style="
+          font-size:18px;
+          color:#8a8a8a;
+          font-weight:bold;
+        ">
+          VS
+        </div>
+
+        <div style="
+          background:#282828;
+          border:1px solid #2cbb5d;
+          border-radius:8px;
+          padding:12px;
+        ">
+          <div style="
+            font-size:11px;
+            color:#8a8a8a;
+            margin-bottom:6px;
+          ">
+            OPTIMAL SOLUTION
+          </div>
+
+          <div style="
+            color:#2cbb5d;
+            font-weight:600;
+            margin-bottom:8px;
+          ">
+            ${a.optimal_solution.method}
+          </div>
+
+          <div style="
+            font-family:monospace;
+            color:#2cbb5d;
+          ">
+            ${a.optimal_solution.time_complexity_big_o}
+          </div>
+
+          <div style="
+            font-family:monospace;
+            color:#acacac;
+            margin-top:4px;
+          ">
+            ${a.optimal_solution.space_complexity_big_o}
+          </div>
+        </div>
+
+      </div>
+
+      <div style="
+        margin-top:14px;
+        padding:10px 12px;
+        border-radius:8px;
+        background:${
+          a.approach_evaluation.is_optimal
+            ? "rgba(44,187,93,0.15)"
+            : "rgba(255,161,22,0.15)"
+        };
+        color:${a.approach_evaluation.is_optimal ? "#2cbb5d" : "#ffa116"};
+        font-weight:600;
+      ">
+        ${
+          a.approach_evaluation.is_optimal
+            ? "✓ Your solution already matches the optimal asymptotic complexity."
+            : "⚠ A faster approach exists."
+        }
+      </div>
+
+      <div style="
+  margin-top:10px;
+  padding:10px;
+  border-radius:8px;
+  background:#1e1e1e;
+  border:1px solid #444;
+">
+  <div style="
+    font-size:11px;
+    color:#8a8a8a;
+    text-transform:uppercase;
+    margin-bottom:4px;
+  ">
+    Complexity Improvement
+  </div>
+
+  <div style="
+    color:#ffa116;
+    font-family:monospace;
+    font-size:15px;
+    font-weight:600;
+  ">
+    ${createSpeedupText(a)}
+  </div>
+</div>
+
+<div style="
+  margin-top:14px;
+  padding:12px;
+  border-radius:8px;
+  background:#282828;
+  border:1px solid #444;
+  line-height:1.5;
+  color:#acacac;
+">
+  ${a.optimal_solution.explanation}
+</div>
+    </div>
+  `;
+}
+
+function createSpeedupText(a) {
+  const current = a.asymptotic_complexity.time_complexity_big_o;
+  const optimal = a.optimal_solution.time_complexity_big_o;
+
+  if (a.approach_evaluation.is_optimal) {
+    return "No asymptotic improvement available.";
+  }
+
+  return `${current} → ${optimal}`;
+}
+
 function renderAnalysis(a) {
   analysisWindow.style.display = "flex";
 
@@ -383,6 +568,7 @@ function renderAnalysis(a) {
         </div>
       </div>
     </div>
+  ${createComparisonCard(a)}
 
     <div style="
       background:#333333;
@@ -420,6 +606,7 @@ function renderAnalysis(a) {
         ${createCostAuditTable(a.block_by_block_cost_audit)}
       </div>
     </details>
+</div>
 
     <details class="lc-details-box">
       <summary>The math behind it</summary>
