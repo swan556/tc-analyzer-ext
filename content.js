@@ -16,15 +16,18 @@ let lastPromptString = "";
     position: "fixed",
     top: "12px",
     right: "12px",
-    padding: "8px 12px",
+    padding: "8px 16px",
     borderRadius: "8px",
-    background: "#f97316",
-    color: "#fff",
+    background: "linear-gradient(90deg, #6f16ff, #4823d0)", // LeetCode Orange
+    color: "#ffffff", // Dark text for contrast
     border: "none",
     zIndex: "999999",
     cursor: "pointer",
-    fontFamily: "Inter, sans-serif",
+    fontFamily:
+      "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
     fontWeight: "bold",
+    // boxShadow: "0 4px 14px rgba(255, 161, 22, 0.3)",
+    transition: "transform 0.2s ease, box-shadow 0.2s ease",
   });
 
   // --- Helper to extract LeetCode Data ---
@@ -131,42 +134,42 @@ function createAnalysisWindow() {
     right: "20px",
     width: "520px",
     maxHeight: "80vh",
-    overflowY: "auto",
-    background: "#111827",
-    color: "white",
+    background: "#282828", // LeetCode editor dark background
+    color: "#eff1f6", // LeetCode standard text color
+    border: "1px solid #3e3e3e",
     resize: "both",
     borderRadius: "12px",
     zIndex: "999999",
-    boxShadow: "0 8px 30px rgba(0,0,0,0.4)",
-    display: "none",
-    fontFamily: "Inter, sans-serif",
+    boxShadow: "0 12px 40px rgba(0,0,0,0.5)",
+    fontFamily:
+      "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
   });
 
   const header = document.createElement("div");
 
   Object.assign(header.style, {
-    padding: "12px",
-    background: "#1f2937",
+    padding: "16px",
+    background: "#1e1e1e", // Slightly darker for header
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     cursor: "move",
     borderTopLeftRadius: "12px",
     borderTopRightRadius: "12px",
+    borderBottom: "1px solid #3e3e3e",
   });
 
   header.innerHTML = `
-    <strong>Complexity Analysis</strong>
-    <button id="lc-close-btn">✕</button>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <strong style="font-size: 15px; font-weight: 600; color: #eff1f6;">Code Breakdown</strong>
+    </div>
+    <button id="lc-close-btn" style="background:transparent; border:none; color:#8a8a8a; cursor:pointer; font-size:16px; padding:4px; transition:color 0.2s;">✕</button>
   `;
-
-  analysisContent = document.createElement("div");
-  analysisContent.style.padding = "16px";
 
   analysisContent = document.createElement("div");
 
   Object.assign(analysisContent.style, {
-    padding: "16px",
+    padding: "20px",
     overflowY: "auto",
     flex: "1",
   });
@@ -174,12 +177,13 @@ function createAnalysisWindow() {
   footerBar = document.createElement("div");
 
   Object.assign(footerBar.style, {
-    padding: "12px",
-    background: "#1f2937",
+    padding: "12px 20px",
+    background: "#1e1e1e",
     borderBottomLeftRadius: "12px",
     borderBottomRightRadius: "12px",
+    borderTop: "1px solid #3e3e3e",
     display: "flex",
-    gap: "10px",
+    gap: "12px",
     justifyContent: "flex-end",
   });
 
@@ -194,6 +198,19 @@ function createAnalysisWindow() {
   };
 
   makeDraggable(analysisWindow, header);
+
+  // Add a small style block to handle details/summary styling elegantly
+  const styleBlock = document.createElement("style");
+  styleBlock.textContent = `
+    .lc-details-box { margin-bottom: 12px; background: #333333; border-radius: 8px; border: 1px solid #444; overflow: hidden; }
+    .lc-details-box summary { padding: 12px 16px; font-weight: 600; cursor: pointer; user-select: none; color: #eff1f6; font-size: 14px; outline: none; transition: background 0.2s; }
+    .lc-details-box summary:hover { background: #3e3e3e; }
+    .lc-details-content { padding: 16px; border-top: 1px solid #444; font-size: 13px; color: #acacac; line-height: 1.6; }
+    .lc-action-btn { background: #333; border: 1px solid #444; color: #eff1f6; padding: 8px 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; transition: all 0.2s; }
+    .lc-action-btn:hover { background: #444; border-color: #555; }
+    .lc-action-btn svg { width: 16px; height: 16px; }
+  `;
+  document.head.appendChild(styleBlock);
 }
 
 function makeDraggable(element, handle) {
@@ -202,6 +219,12 @@ function makeDraggable(element, handle) {
   let offsetY = 0;
 
   handle.addEventListener("mousedown", (e) => {
+    // Only drag if left click
+    if (e.button !== 0) return;
+
+    // Ignore drag if clicking on the close button
+    if (e.target.id === "lc-close-btn") return;
+
     isDragging = true;
 
     const rect = element.getBoundingClientRect();
@@ -227,16 +250,16 @@ function makeDraggable(element, handle) {
 }
 
 function getVerdictColor(isOptimal) {
-  return isOptimal ? "#22c55e" : "#ef4444";
+  return isOptimal ? "#2cbb5d" : "#ef4743"; // LeetCode Green & Red
 }
 
 function getTleColor(tle) {
   const value = tle.toLowerCase();
 
-  if (value.includes("no")) return "#22c55e";
-  if (value.includes("high")) return "#f59e0b";
+  if (value.includes("no")) return "#2cbb5d";
+  if (value.includes("high")) return "#ffa116"; // LeetCode Orange
 
-  return "#ef4444";
+  return "#ef4743";
 }
 
 function createCostAuditTable(audit) {
@@ -244,14 +267,14 @@ function createCostAuditTable(audit) {
     <table style="
       width:100%;
       border-collapse:collapse;
-      margin-top:10px;
-      font-size:12px;
+      font-size:13px;
+      color:#acacac;
     ">
       <thead>
         <tr>
-          <th style="text-align:left;padding:8px;border-bottom:1px solid #374151;">Code Segment</th>
-          <th style="text-align:left;padding:8px;border-bottom:1px solid #374151;">Time</th>
-          <th style="text-align:left;padding:8px;border-bottom:1px solid #374151;">Space</th>
+          <th style="text-align:left;padding:10px;border-bottom:1px solid #444;color:#eff1f6;font-weight:600;">Code Snippet</th>
+          <th style="text-align:left;padding:10px;border-bottom:1px solid #444;color:#eff1f6;font-weight:600;">Time</th>
+          <th style="text-align:left;padding:10px;border-bottom:1px solid #444;color:#eff1f6;font-weight:600;">Space</th>
         </tr>
       </thead>
       <tbody>
@@ -259,13 +282,13 @@ function createCostAuditTable(audit) {
           .map(
             (item) => `
           <tr>
-            <td style="padding:8px;border-bottom:1px solid #1f2937;">
-              <code>${item.code_segment}</code>
+            <td style="padding:10px;border-bottom:1px solid #3e3e3e;font-family:monospace;color:#ffa116;">
+              ${item.code_segment}
             </td>
-            <td style="padding:8px;border-bottom:1px solid #1f2937;">
+            <td style="padding:10px;border-bottom:1px solid #3e3e3e;">
               ${item.exact_time_cost_contribution}
             </td>
-            <td style="padding:8px;border-bottom:1px solid #1f2937;">
+            <td style="padding:10px;border-bottom:1px solid #3e3e3e;">
               ${item.exact_space_cost_contribution}
             </td>
           </tr>
@@ -297,45 +320,45 @@ function renderAnalysis(a) {
     ">
 
       <div style="
-        background:#1f2937;
-        padding:12px;
+        background:#333333;
+        padding:16px;
         border-radius:10px;
+        border:1px solid #444;
       ">
-        <div style="font-size:11px;color:#9ca3af">
-          BIG-O TIME
+        <div style="font-size:12px;color:#8a8a8a;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">
+          Time Complexity
         </div>
-
-        <div style="font-size:20px;font-weight:bold;">
+        <div style="font-size:22px;font-weight:bold;color:#eff1f6;font-family:monospace;">
           ${a.asymptotic_complexity.time_complexity_big_o}
         </div>
       </div>
 
       <div style="
-        background:#1f2937;
-        padding:12px;
+        background:#333333;
+        padding:16px;
         border-radius:10px;
+        border:1px solid #444;
       ">
-        <div style="font-size:11px;color:#9ca3af">
-          BIG-O SPACE
+        <div style="font-size:12px;color:#8a8a8a;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">
+          Space Complexity
         </div>
-
-        <div style="font-size:20px;font-weight:bold;">
+        <div style="font-size:22px;font-weight:bold;color:#eff1f6;font-family:monospace;">
           ${a.asymptotic_complexity.space_complexity_big_o}
         </div>
       </div>
 
       <div style="
-        background:#1f2937;
-        padding:12px;
+        background:#333333;
+        padding:16px;
         border-radius:10px;
+        border:1px solid #444;
       ">
-        <div style="font-size:11px;color:#9ca3af">
-          VERDICT
+        <div style="font-size:12px;color:#8a8a8a;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">
+          Good to Go?
         </div>
-
         <div style="
           font-size:18px;
-          font-weight:bold;
+          font-weight:600;
           color:${verdictColor};
         ">
           ${verdictText}
@@ -343,17 +366,17 @@ function renderAnalysis(a) {
       </div>
 
       <div style="
-        background:#1f2937;
-        padding:12px;
+        background:#333333;
+        padding:16px;
         border-radius:10px;
+        border:1px solid #444;
       ">
-        <div style="font-size:11px;color:#9ca3af">
-          TLE RISK
+        <div style="font-size:12px;color:#8a8a8a;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">
+          Timeout Risk
         </div>
-
         <div style="
           font-size:18px;
-          font-weight:bold;
+          font-weight:600;
           color:${tleColor};
         ">
           ${a.worst_case_execution_estimate.will_it_tle}
@@ -362,94 +385,89 @@ function renderAnalysis(a) {
     </div>
 
     <div style="
-      background:#1f2937;
-      padding:12px;
+      background:#333333;
+      padding:16px;
       border-radius:10px;
-      margin-bottom:16px;
+      border:1px solid #444;
+      margin-bottom:20px;
+      border-left: 4px solid #ffa116;
     ">
-      <div style="font-size:11px;color:#9ca3af">
-        RECOMMENDED APPROACH
+      <div style="font-size:12px;color:#8a8a8a;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">
+        Pro Tip
       </div>
-
-      <div style="
-        font-size:16px;
-        font-weight:bold;
-        margin-top:4px;
-      ">
+      <div style="font-size:15px;color:#eff1f6;line-height:1.5;">
         ${a.approach_evaluation.optimal_method_recommended}
       </div>
     </div>
 
-    <details>
-      <summary>Constraints</summary>
-
-      <div style="margin-top:10px;">
-        <strong>Variables:</strong>
-        ${a.problem_constraints_extracted.variables.join(", ")}
-
-        <br><br>
-
-        <strong>Maximum Bounds:</strong>
-        ${a.problem_constraints_extracted.max_bounds.join(", ")}
+    <details class="lc-details-box">
+      <summary>What we're working with (Constraints)</summary>
+      <div class="lc-details-content">
+        <div style="margin-bottom:8px;">
+          <strong style="color:#eff1f6;">Variables:</strong>
+          <span style="font-family:monospace; color:#ffa116;">${a.problem_constraints_extracted.variables.join(", ")}</span>
+        </div>
+        <div>
+          <strong style="color:#eff1f6;">Maximum Bounds:</strong>
+          <span style="font-family:monospace; color:#ffa116;">${a.problem_constraints_extracted.max_bounds.join(", ")}</span>
+        </div>
       </div>
     </details>
 
-    <details>
-      <summary>Cost Audit</summary>
-
-      ${createCostAuditTable(a.block_by_block_cost_audit)}
+    <details class="lc-details-box">
+      <summary>Line-by-line breakdown</summary>
+      <div class="lc-details-content" style="padding:0;">
+        ${createCostAuditTable(a.block_by_block_cost_audit)}
+      </div>
     </details>
 
-    <details>
-      <summary>Formula Derivation</summary>
-
-      <div style="margin-top:10px;">
-        <p>
-          <strong>Exact Time Formula</strong>
-        </p>
-
-        <code>
+    <details class="lc-details-box">
+      <summary>The math behind it</summary>
+      <div class="lc-details-content">
+        <p style="margin-bottom:4px;"><strong style="color:#eff1f6;">Exact Time Formula</strong></p>
+        <code style="display:block; padding:8px; background:#1e1e1e; border-radius:6px; margin-bottom:12px; color:#ffa116;">
           ${a.exact_performance_formulas.exact_time_formula}
         </code>
 
-        <p style="margin-top:15px;">
-          <strong>Exact Space Formula</strong>
-        </p>
-
-        <code>
+        <p style="margin-bottom:4px;"><strong style="color:#eff1f6;">Exact Space Formula</strong></p>
+        <code style="display:block; padding:8px; background:#1e1e1e; border-radius:6px; margin-bottom:12px; color:#ffa116;">
           ${a.exact_performance_formulas.exact_space_formula}
         </code>
 
-        <p style="margin-top:15px;">
-          <strong>Maximum Operations</strong>
-        </p>
-
-        <code>
+        <p style="margin-bottom:4px;"><strong style="color:#eff1f6;">Maximum Operations Estimate</strong></p>
+        <code style="display:block; padding:8px; background:#1e1e1e; border-radius:6px; color:#ffa116;">
           ${a.worst_case_execution_estimate.max_calculated_operations}
         </code>
       </div>
     </details>
 
-    <details>
-      <summary>Optimization Suggestions</summary>
-
-      <div style="
-        margin-top:10px;
-        line-height:1.6;
-      ">
+    <details class="lc-details-box">
+      <summary>Tips to make it better</summary>
+      <div class="lc-details-content" style="white-space: pre-line;">
         ${a.detailed_optimization_feedback}
       </div>
     </details>
   `;
+
+  // Replaced unicode characters with clean SVG icons in the buttons
   footerBar.innerHTML = `
-  <button id="copy-analysis-btn">
-    ⧉
+  <button id="copy-analysis-btn" class="lc-action-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+    Copy Summary
   </button>
 
-  <button id="reanalyze-btn">
-    ⟳
+  <button id="reanalyze-btn" class="lc-action-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="23 4 23 10 17 10"></polyline>
+      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+    </svg>
+    Re-Analyze
   </button>
-`;
+  
+  <button id="close-analysis-btn" style="display:none;"></button> `;
 
   document.getElementById("copy-analysis-btn").onclick = () => {
     const summary = `
@@ -461,6 +479,14 @@ TLE Risk: ${a.worst_case_execution_estimate.will_it_tle}
 `;
 
     navigator.clipboard.writeText(summary);
+
+    // Quick visual feedback that it copied
+    const btn = document.getElementById("copy-analysis-btn");
+    const originalText = btn.innerHTML;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#2cbb5d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!`;
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+    }, 2000);
   };
 
   document.getElementById("close-analysis-btn").onclick = () => {
