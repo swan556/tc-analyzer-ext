@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "LeetCode Mistral Complexity Analyzer",
+  "name": "LCA",
   "version": "1.0",
   "description": "Extracts problem context and code to analyze complexity via a custom Mistral Agent.",
   "permissions": ["activeTab", "storage"],
@@ -18,6 +18,11 @@
     }
   ],
   "host_permissions": ["https://api.mistral.ai/*"],
+  "icons": {
+    "24": "icons/icon-24.png",
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png"
+  },
   "browser_specific_settings": {
     "gecko": {
       "id": "leetcode-mistral-analyzer@yourlocaldev.com"
