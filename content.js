@@ -452,21 +452,59 @@ function renderAnalysis(a) {
   // Replaced unicode characters with clean SVG icons in the buttons
   footerBar.innerHTML = `
   <button id="copy-analysis-btn" class="lc-action-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-    </svg>
-    Copy Summary
-  </button>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+  </svg>
+  Copy Summary
+</button>
 
-  <button id="reanalyze-btn" class="lc-action-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="23 4 23 10 17 10"></polyline>
-      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-    </svg>
-    Re-Analyze
-  </button>
-  
+<button id="reanalyze-btn" class="lc-action-btn">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="23 4 23 10 17 10"></polyline>
+    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+  </svg>
+  Re-Analyze
+</button>
+
+<button id="settings-btn" class="lc-action-btn">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="3"></circle>
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82
+             l.06.06a2 2 0 0 1 0 2.83
+             2 2 0 0 1-2.83 0l-.06-.06
+             a1.65 1.65 0 0 0-1.82-.33
+             1.65 1.65 0 0 0-1 1.51V21
+             a2 2 0 0 1-4 0v-.09
+             a1.65 1.65 0 0 0-1-1.51
+             1.65 1.65 0 0 0-1.82.33
+             l-.06.06a2 2 0 0 1-2.83 0
+             2 2 0 0 1 0-2.83l.06-.06
+             a1.65 1.65 0 0 0 .33-1.82
+             1.65 1.65 0 0 0-1.51-1H3
+             a2 2 0 0 1 0-4h.09
+             a1.65 1.65 0 0 0 1.51-1
+             1.65 1.65 0 0 0-.33-1.82
+             l-.06-.06a2 2 0 0 1 0-2.83
+             2 2 0 0 1 2.83 0l.06.06
+             a1.65 1.65 0 0 0 1.82.33H9
+             a1.65 1.65 0 0 0 1-1.51V3
+             a2 2 0 0 1 4 0v.09
+             a1.65 1.65 0 0 0 1 1.51
+             1.65 1.65 0 0 0 1.82-.33
+             l.06-.06a2 2 0 0 1 2.83 0
+             2 2 0 0 1 0 2.83l-.06.06
+             a1.65 1.65 0 0 0-.33 1.82V9
+             a1.65 1.65 0 0 0 1.51 1H21
+             a2 2 0 0 1 0 4h-.09
+             a1.65 1.65 0 0 0-1.51 1z">
+    </path>
+  </svg>
+  Settings
+</button>
   <button id="close-analysis-btn" style="display:none;"></button> `;
 
   document.getElementById("copy-analysis-btn").onclick = () => {
@@ -495,5 +533,11 @@ TLE Risk: ${a.worst_case_execution_estimate.will_it_tle}
 
   document.getElementById("reanalyze-btn").onclick = () => {
     document.getElementById("lc-llm-analyze-btn").click();
+  };
+
+  document.getElementById("settings-btn").onclick = () => {
+    browser.runtime.sendMessage({
+      action: "openSettings",
+    });
   };
 }

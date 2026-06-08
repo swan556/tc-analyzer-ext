@@ -4,6 +4,13 @@ const MISTRAL_ENDPOINT = "https://api.mistral.ai/v1/agents/completions";
 const AGENT_ID = "ag_019ea15e364c72e69f2b9c1309eea0a1";
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+  if (msg.action === "openSettings") {
+    browser.tabs.create({
+      url: browser.runtime.getURL("options.html"),
+    });
+
+    return;
+  }
   if (msg.action !== "analyze") return;
 
   (async () => {

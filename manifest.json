@@ -3,7 +3,7 @@
   "name": "LCA",
   "version": "1.0",
   "description": "Extracts problem context and code to analyze complexity via a custom Mistral Agent.",
-  "permissions": ["activeTab", "storage"],
+  "permissions": ["activeTab", "storage", "tabs"],
   "background": {
     "scripts": ["background.js"]
   },
