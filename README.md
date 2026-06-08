@@ -79,15 +79,12 @@ The key is stored locally using the browser storage API and is never hardcoded i
 
 ## Screenshots
 
-Add screenshots here.
-
 ### Analysis Dashboard
 
-![Analysis Dashboard](screenshots/dashboard.png)
-
-### Detailed Cost Audit
-
-![Cost Audit](screenshots/cost-audit.png)
+![Analysis Dashboard]
+(screenshots/3.png)
+(screenshots/2.png)
+(screenshots/1.png)
 
 ### Settings Page
 
@@ -102,7 +99,7 @@ Add screenshots here.
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/lca.git
+git clone https://github.com/swan556/tc-analyzer-ext
 ```
 
 2. Open Firefox.
@@ -198,17 +195,12 @@ The analysis is rendered as an interactive dashboard directly inside LeetCode.
 ## Project Structure
 
 ```text
-LCA/
+TC-ANALYZER-EXT/
 ├── content.js
 ├── background.js
 ├── options.html
 ├── options.js
 ├── manifest.json
-├── icons/
-│   ├── 24.png
-│   ├── 48.png
-│   └── 96.png
-├── screenshots/
 └── README.md
 ```
 
@@ -219,15 +211,11 @@ LCA/
 - Chrome support
 - Better operation count estimation
 - Multiple AI providers
-- Local model support
-- Historical analysis tracking
 - Export reports
-- Side-by-side solution comparison
 
 ---
 
 ## Disclaimer
 
 LCA is an educational tool intended to help developers understand algorithmic complexity and optimization opportunities.
-
 AI-generated analysis may occasionally be incorrect and should be used as a learning aid rather than a definitive source of truth.
