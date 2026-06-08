@@ -4,7 +4,7 @@ let footerBar;
 let lastPromptString = "";
 
 (function injectButton() {
-  console.log("CONTENT SCRIPT LOADED");
+  // console.log("CONTENT SCRIPT LOADED");
   if (document.getElementById("lc-llm-analyze-btn")) return;
 
   const btn = document.createElement("button");
@@ -65,12 +65,12 @@ let lastPromptString = "";
   }
 
   btn.onclick = async () => {
-    console.log("Extracting data from LeetCode...");
+    // console.log("Extracting data from LeetCode...");
 
     const { code, problemText, constraintText } = extractLeetCodeData();
 
     if (!code || code.trim().length < 3) {
-      console.log("Could not read code. Ensure the editor is visible.");
+      // console.log("Could not read code. Ensure the editor is visible.");
       return;
     }
 
@@ -84,21 +84,21 @@ let lastPromptString = "";
     // We stringify it because the LLM expects a single string prompt in the 'content' field
     const promptString = JSON.stringify(llmInputPayload, null, 2);
 
-    console.log("Sending to Mistral Agent...");
+    // console.log("Sending to Mistral Agent...");
     lastPromptString = promptString;
     chrome.runtime.sendMessage(
       { action: "analyze", prompt: promptString },
       (resp) => {
         if (chrome.runtime.lastError) {
-          console.log("Extension Error: " + chrome.runtime.lastError.message);
+          // console.log("Extension Error: " + chrome.runtime.lastError.message);
           return;
         }
         if (!resp) {
-          console.log("No response from background script.");
+          // console.log("No response from background script.");
           return;
         }
         if (resp.error) {
-          console.log("API Error: " + resp.error);
+          // console.log("API Error: " + resp.error);
           return;
         }
 
@@ -110,7 +110,7 @@ let lastPromptString = "";
 
           const analysis = JSON.parse(cleanJson);
 
-          console.log("Parsed analysis:", analysis);
+          // console.log("Parsed analysis:", analysis);
 
           renderAnalysis(analysis);
         } catch (err) {
