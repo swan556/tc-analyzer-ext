@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Free LeetCode Complexity Analyzer",
+  "name": "Free LeetCode TC Analyzer",
   "version": "1.0",
   "description": "Extracts problem context and code to analyze complexity via a custom Mistral Agent.",
 
@@ -32,7 +32,7 @@
 
   "browser_specific_settings": {
     "gecko": {
-      "id": "leetcode-mistral-analyzer@yourlocaldev.com",
+      "id": "leetcode-tc-analyzer@yourlocaldev.com",
       "data_collection_permissions": {
         "required": ["none"]
       }
